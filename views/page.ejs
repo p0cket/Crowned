@@ -13,11 +13,12 @@
   <body>
     <div class="navbar navbar-default">
       <div class="pull-left" id="navStuff">
-        <p class="navbar-brand">In Big Text</p>
+        <p class="navbar-brand">Crowned</p>
       </div>
     </div>
 
     <div class="jumbotron">
+      <p>The Question Asked</p>
       <div class="container">
         <h1><%= displayName %></h1>
       </div>
@@ -27,6 +28,32 @@
     </div>
 
 
+    <div class="jumbotron">
+      <p>The response</p>
+      <div class="container">
+        <h1><%= displayName %></h1>
+      </div>
+    </div>
+    <div class="container well">
+      <p><%= displayText %></p>
+    </div>
+
+    <div class="container well">
+      <p id="newResponse"></p>
+      <form action="/responding" method="POST" >
+        <div class="form-group">
+          <label>Whats your name?</label>
+          <input name="responderName" class="form-control" placeholder="Your Name">
+        </div>
+        <div class="form-group">
+          <label>What is your response?</label>
+          <p class="help-block">Be nice and honest :)</p>
+          <input name="responderText" class="form-control" placeholder="Enter question...">
+        </div>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
 
   </body>
 

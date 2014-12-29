@@ -27,7 +27,9 @@ app.get('/', function (req, res) {
 var pages = {
   'page0' : {
     name : "Aaron Goldblatt",
-    text : 'Hey, whats up?'
+    text : 'Hey, whats up?',
+    responderName : "Elon Musk",
+    responderText : "Not much, glad to be here"
   }
 }
 
@@ -50,6 +52,21 @@ app.post('/asking', function(req, res) {
   id++
 });
 
+app.post('/responding', function(req, res) {
+  console.log(req.body);
+  //take the contents submitted
+  var responseName = req.body.responderName;
+  var responseText = req.body.responderText;
+  //assign the contents to an object, a page object
+  pages[id] = {
+    rname : responseName,
+    rtext : responseText
+  }
+  //then send them to the same page
+  res.redirect('/page/' + id)
+  //and we do not change the unique page ID
+});
+
 //randomvar is in the URL bar
 app.get("/page/:randomvar", function(req, res) {
   var pageNum = req.params.randomvar;
@@ -59,7 +76,9 @@ app.get("/page/:randomvar", function(req, res) {
   //When its called on, lets render it with the name and text contents
   res.render('page', {
     displayName : thisPage.name,
-    displayText : thisPage.text
+    displayText : thisPage.text,
+    responseName : thisPage.rname,
+    responseText : thisPage.rtext
   })
 });
 
