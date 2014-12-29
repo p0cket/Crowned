@@ -1,3 +1,96 @@
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function (callback) {
+  // yay!
+});
+var express = require('express');
+var app = express();
+
+
+var User = mongoose.model('User', {
+  crowned: Boolean,
+  name: String,
+  bio: String,
+});
+
+app.get('/users', function(req, res) {
+  Users.find({}, function(err, users) {
+    if (err) {
+      throw err;
+    }
+
+    res.send(users);
+  });
+});
+
+/*
+{
+user: {
+crowned: true,
+name: "David Hermel",
+bio: "One cool dood"
+}
+}
+*/
+// it will also have something like: _id: "293jf2j3f2032",
+
+/* this will be more angular
+$http.post('/users', {
+user: {
+crowned: true,
+name: "David Hermel",
+}
+}).then(function(response) {
+var user = response.user;
+});
+*/
+
+app.post('/users', function(req, res) {
+  var bodyUser = req.body.user;
+  var user = new User(bodyUser);
+
+  //
+  // if (!user.beach) {
+  //   cat.lives = Math.floor(Math.random() * 100);
+  // } else {
+  //   cat.lives = 1;
+  // }
+
+  console.log(user.crowned);
+
+  user.save(function(err, savedUser) {
+    // could be from unique index or other mongodb server error
+    if (err) {
+      throw err;
+    }
+
+    res.send({
+      cat: savedUser
+    });
+  });
+});
+
+app.get('/users/:id', function(req, res) {
+  if (!req.param('id')) {
+    return res.send(400, "Missing id");
+  }
+//The findOne instead of just find returns 1 entry and removed the array,
+//it would give you an array otherwise
+  User.findOne({_id: req.param('id')}, function(err, user) {
+    if (err) {
+      throw err;
+    }
+
+    res.send(user);
+  });
+});
+
+app.listen(3000);
+
+
+//start of my old code
 var express 		= require('express');
 var bodyParser  = require('body-parser');
 var ejs         = require('ejs');
