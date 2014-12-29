@@ -26,8 +26,8 @@ app.get('/', function (req, res) {
 
 var pages = {
   'page1' : {
-    text : "sample page1",
-    image : 'http://d13pix9kaak6wt.cloudfront.net/background/pocket_1292613918_03.jpg'
+    name : "Aaron Goldblatt",
+    text : 'Hey, whats up?'
   }
 }
 
@@ -36,19 +36,20 @@ var id = 0;
 
 app.post('/asking', function(req, res) {
   console.log(req.body);
-  var userName = req.body.questionName;
+  var displayName = req.body.questionName;
   var displayText = req.body.questionText;
   pages[id++] = {
-    userName : displayName,
+    name : displayName,
     text : displayText
   }
-  res.redirect('/page/' + userName)
+  res.redirect('/page/' + id)
 });
 
 app.get("/page/:makeNewPage", function(req, res) {
   var thisPage = pages[req.params.makeNewPage];
   res.render('page', {
-    displayText : thisPage.text,
+    displayName : thisPage.name,
+    displayText : thisPage.text
   })
 });
 
