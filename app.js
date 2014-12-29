@@ -34,23 +34,21 @@ var pages = {
 var id = 0;
 // I put in the bones of my node
 
-app.post('/posting', function(req, res) {
+app.post('/asking', function(req, res) {
   console.log(req.body);
-  var pageName = req.body.pageName;
-  var displayText = req.body.displayText;
-  var displayImage = req.body.displayImage;
-  pages[pageName] = {
-    text : displayText,
-    image : displayImage
+  var userName = req.body.questionName;
+  var displayText = req.body.questionText;
+  pages[id++] = {
+    userName : displayName,
+    text : displayText
   }
-  res.redirect('/page/' + pageName)
+  res.redirect('/page/' + userName)
 });
 
 app.get("/page/:makeNewPage", function(req, res) {
   var thisPage = pages[req.params.makeNewPage];
   res.render('page', {
     displayText : thisPage.text,
-    image : thisPage.image
   })
 });
 
