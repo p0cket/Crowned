@@ -1,3 +1,4 @@
+//mongoose
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
@@ -5,9 +6,31 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
   // yay!
 });
-var express = require('express');
-var app = express();
+//start of my express, bodyparser, and js
+var express 		= require('express');
+var bodyParser  = require('body-parser');
+var ejs         = require('ejs');
+var http			  = require('http');
+var app         = express()
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+}));
 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.set('view options', {layout: false});
+// why I then do this again? We'll find out
+app.set('port', (process.env.PORT || 5000));
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/public'))
+app.set('view options', {layout: false});
+
+//begin
+app.get('/', function (req, res) {
+  res.render('index')
+})
 
 var User = mongoose.model('User', {
   crowned: Boolean,
@@ -50,14 +73,12 @@ var user = response.user;
 app.post('/users', function(req, res) {
   var bodyUser = req.body.user;
   var user = new User(bodyUser);
-
   //
   // if (!user.beach) {
   //   cat.lives = Math.floor(Math.random() * 100);
   // } else {
   //   cat.lives = 1;
   // }
-
   console.log(user.crowned);
 
   user.save(function(err, savedUser) {
@@ -65,9 +86,8 @@ app.post('/users', function(req, res) {
     if (err) {
       throw err;
     }
-
     res.send({
-      cat: savedUser
+      user: savedUser
     });
   });
 });
@@ -76,47 +96,18 @@ app.get('/users/:id', function(req, res) {
   if (!req.param('id')) {
     return res.send(400, "Missing id");
   }
-//The findOne instead of just find returns 1 entry and removed the array,
-//it would give you an array otherwise
+  //The findOne instead of just find returns 1 entry and removed the array,
+  //it would give you an array otherwise
   User.findOne({_id: req.param('id')}, function(err, user) {
     if (err) {
       throw err;
     }
-
+    
     res.send(user);
   });
 });
 
-app.listen(3000);
-
-
-//start of my old code
-var express 		= require('express');
-var bodyParser  = require('body-parser');
-var ejs         = require('ejs');
-var http			  = require('http');
-var app         = express()
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-}));
-
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-app.set('view options', {layout: false});
-// why I then do this again? We'll find out
-app.set('port', (process.env.PORT || 5000));
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/public'))
-app.set('view options', {layout: false});
-
-
-app.get('/', function (req, res) {
-  res.render('index')
-})
-
-
+//end of mongoose code, begin old node code
 var pages = {
   'page0' : {
     name : "Aaron Goldblatt",
