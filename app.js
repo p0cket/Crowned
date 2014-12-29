@@ -25,28 +25,38 @@ app.get('/', function (req, res) {
 
 
 var pages = {
-  'page1' : {
+  'page0' : {
     name : "Aaron Goldblatt",
     text : 'Hey, whats up?'
   }
 }
 
-var id = 0;
-// I put in the bones of my node
+var id = 1;
 
+//when '/asking' is triggered
 app.post('/asking', function(req, res) {
   console.log(req.body);
+  //take the contents submitted
   var displayName = req.body.questionName;
   var displayText = req.body.questionText;
-  pages[id++] = {
+  //assign the contents to an object, a page object
+  pages[id] = {
     name : displayName,
     text : displayText
   }
+  //then send them to that page
   res.redirect('/page/' + id)
+  //change the unique page ID (Here by adding one)
+  id++
 });
 
-app.get("/page/:makeNewPage", function(req, res) {
-  var thisPage = pages[req.params.makeNewPage];
+//randomvar is in the URL bar
+app.get("/page/:randomvar", function(req, res) {
+  var pageNum = req.params.randomvar;
+  //so now pageNum becomes the number of the page
+  var thisPage = pages[pageNum];
+  //thisPage is the object from that number, lets access it
+  //When its called on, lets render it with the name and text contents
   res.render('page', {
     displayName : thisPage.name,
     displayText : thisPage.text
