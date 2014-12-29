@@ -1,0 +1,18 @@
+/*#bigtext {
+	position: center;
+}*/
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+/*why wouldn't this work?
+
+.title{
+  display: inline;
+}
+
+#titleName{
+  color:blue;
+}*/

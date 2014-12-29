@@ -1,0 +1,19 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.10.0",
+    "connect": "latest",
+    "connect-flash": "latest",
+    "ejs": "^1.0.0",
+    "express": "3.3.4",
+    "jade": "*",
+    "mime": "latest",
+    "mongoose": "latest",
+    "socket.io": "latest"
+  }
+}
