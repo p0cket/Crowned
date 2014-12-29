@@ -23,19 +23,19 @@ app.get('/', function (req, res) {
   res.render('index')
 })
 
-var questions = {
-  'question1' : {
-    timestamp : "1",
-    text : "sample question1",
+
+var pages = {
+  'page1' : {
+    text : "sample page1",
     image : 'http://d13pix9kaak6wt.cloudfront.net/background/pocket_1292613918_03.jpg'
   }
 }
 
+var id = 0;
+// I put in the bones of my node
 
-// this will be later when posting
 app.post('/posting', function(req, res) {
   console.log(req.body);
-  document.getElementByID()
   var pageName = req.body.pageName;
   var displayText = req.body.displayText;
   var displayImage = req.body.displayImage;
