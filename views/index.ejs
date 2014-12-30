@@ -27,16 +27,16 @@
 
   <div class="container">
     <h5>Simple Login Page</h5>
-    <form name="login">
-      Username<input type="text" name="userid"/>
-      Password<input type="password" name="pswrd"/>
-      <input type="button" onclick="check(this.form)" value="Login"/>
+    <form name="login" action="/users" method="POST">
+      Username<input type="text" name="username"/>
+      Password<input type="password" name="password"/>
+      <input type="submit" class="btn btn-default" value="Login"/>
     </form>
   </div>
 
 	<div class="container well">
 	<p id="newQuestion"></p>
-	<form action="/asking" method="POST" >
+	<form action="/asking" method="POST">
 		<div class="form-group">
 			<label>Whats your name?</label>
 			<input name="questionName" class="form-control" placeholder="Your Name">

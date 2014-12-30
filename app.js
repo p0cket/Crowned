@@ -33,9 +33,10 @@ app.get('/', function (req, res) {
 })
 
 var User = mongoose.model('User', {
+  username: String,
+  password: String,
   crowned: Boolean,
-  name: String,
-  bio: String,
+  bio: String
 });
 
 app.get('/users', function(req, res) {
@@ -43,7 +44,6 @@ app.get('/users', function(req, res) {
     if (err) {
       throw err;
     }
-
     res.send(users);
   });
 });
@@ -51,8 +51,9 @@ app.get('/users', function(req, res) {
 /*
 {
 user: {
+username: "davidHermel",
+password: "banana",
 crowned: true,
-name: "David Hermel",
 bio: "One cool dood"
 }
 }
@@ -71,7 +72,8 @@ var user = response.user;
 */
 
 app.post('/users', function(req, res) {
-  var bodyUser = req.body.user;
+  //body holds post data - .user was too specific and didn't exist
+  var bodyUser = req.body;
   var user = new User(bodyUser);
   //
   // if (!user.beach) {
@@ -79,7 +81,6 @@ app.post('/users', function(req, res) {
   // } else {
   //   cat.lives = 1;
   // }
-  console.log(user.crowned);
 
   user.save(function(err, savedUser) {
     // could be from unique index or other mongodb server error
@@ -102,9 +103,20 @@ app.get('/users/:id', function(req, res) {
     if (err) {
       throw err;
     }
-    
     res.send(user);
   });
+});
+
+app.get("/users/:username", function(req, res) {
+
+  User.findOne({username: req.params.username}, function(err, user) {
+    if (err) {
+      throw err;
+    }
+    res.render('users', {
+    displayUsername : user.username,
+    displayBio : user.bio
+  })
 });
 
 //end of mongoose code, begin old node code
