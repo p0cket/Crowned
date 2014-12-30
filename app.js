@@ -116,7 +116,7 @@ app.get("/users/:username", function(req, res) {
         displayUsername : user.username,
         displayBio : user.bio
         })
-    });
+      });
 });
 
 //end of mongoose code, begin old node code
