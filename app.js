@@ -108,15 +108,15 @@ app.get('/users/:id', function(req, res) {
 });
 
 app.get("/users/:username", function(req, res) {
-
   User.findOne({username: req.params.username}, function(err, user) {
     if (err) {
       throw err;
     }
-    res.render('users', {
-    displayUsername : user.username,
-    displayBio : user.bio
-  })
+        res.render('users', {
+        displayUsername : user.username,
+        displayBio : user.bio
+        })
+    });
 });
 
 //end of mongoose code, begin old node code
