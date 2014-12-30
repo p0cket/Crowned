@@ -3,32 +3,36 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function (callback) {
+db.once('open', function(callback) {
   // yay!
 });
 //start of my express, bodyparser, and js
-var express 		= require('express');
-var bodyParser  = require('body-parser');
-var ejs         = require('ejs');
-var http			  = require('http');
-var app         = express()
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+var express = require('express');
+var bodyParser = require('body-parser');
+var ejs = require('ejs');
+var http = require('http');
+var app = express()
+app.use(bodyParser.json()); // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
   extended: true
 }));
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-app.set('view options', {layout: false});
+app.set('view options', {
+  layout: false
+});
 // why I then do this again? We'll find out
 app.set('port', (process.env.PORT || 5000));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'))
-app.set('view options', {layout: false});
+app.set('view options', {
+  layout: false
+});
 
 //begin
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
   res.render('index')
 })
 
@@ -75,6 +79,7 @@ app.post('/users', function(req, res) {
   //body holds post data - .user was too specific and didn't exist
   var bodyUser = req.body;
   var user = new User(bodyUser);
+  console.log(bodyUser);
   //
   // if (!user.beach) {
   //   cat.lives = Math.floor(Math.random() * 100);
@@ -93,39 +98,29 @@ app.post('/users', function(req, res) {
   });
 });
 
-app.get('/users/:id', function(req, res) {
-  if (!req.param('id')) {
-    return res.send(400, "Missing id");
-  }
-  //The findOne instead of just find returns 1 entry and removed the array,
-  //it would give you an array otherwise
-  User.findOne({_id: req.param('id')}, function(err, user) {
-    if (err) {
-      throw err;
-    }
-    res.send(user);
-  });
-});
-
 app.get("/users/:username", function(req, res) {
-  User.findOne({username: req.params.username}, function(err, user) {
+  console.log(req.param('username'));
+  User.findOne({
+    username: req.param('username')
+  }, function(err, user) {
     if (err) {
       throw err;
     }
-        res.render('users', {
-        displayUsername : user.username,
-        displayBio : user.bio
-        })
-      });
+    console.log(user);
+    res.render('users', {
+      displayUsername: user.username,
+      displayBio: user.bio
+    })
+  });
 });
 
 //end of mongoose code, begin old node code
 var pages = {
-  'page0' : {
-    name : "Aaron Goldblatt",
-    text : 'Hey, whats up?',
-    responderName : "Elon Musk",
-    responderText : "Not much, glad to be here"
+  'page0': {
+    name: "Aaron Goldblatt",
+    text: 'Hey, whats up?',
+    responderName: "Elon Musk",
+    responderText: "Not much, glad to be here"
   }
 }
 
@@ -139,12 +134,12 @@ app.post('/asking', function(req, res) {
   var displayText = req.body.questionText;
   //assign the contents to an object, a page object
   pages[id] = {
-    name : displayName,
-    text : displayText
-  }
-  //then send them to that page
+      name: displayName,
+      text: displayText
+    }
+    //then send them to that page
   res.redirect('/page/' + id)
-  //change the unique page ID (Here by adding one)
+    //change the unique page ID (Here by adding one)
   id++
 });
 
@@ -155,12 +150,12 @@ app.post('/responding', function(req, res) {
   var responseText = req.body.responderText;
   //assign the contents to an object, a page object
   pages[id] = {
-    rname : responseName,
-    rtext : responseText
-  }
-  //then send them to the same page
+      rname: responseName,
+      rtext: responseText
+    }
+    //then send them to the same page
   res.redirect('/page/' + id)
-  //and we do not change the unique page ID
+    //and we do not change the unique page ID
 });
 
 //randomvar is in the URL bar
@@ -171,10 +166,10 @@ app.get("/page/:randomvar", function(req, res) {
   //thisPage is the object from that number, lets access it
   //When its called on, lets render it with the name and text contents
   res.render('page', {
-    displayName : thisPage.name,
-    displayText : thisPage.text,
-    responseName : thisPage.rname,
-    responseText : thisPage.rtext
+    displayName: thisPage.name,
+    displayText: thisPage.text,
+    responseName: thisPage.rname,
+    responseText: thisPage.rtext
   })
 });
 
