@@ -121,10 +121,9 @@ app.get("/users/:username", function(req, res) {
     if (err) {
       throw err;
     }
-    console.log(user);
-    if (!user.username){
-      res.render('404')
-    }
+    // else if (user.username == null){
+    //   res.render('404')
+    // }
     else{
       res.render('users', {
         displayUsername: user.username,
