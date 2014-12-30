@@ -107,10 +107,15 @@ app.get("/users/:username", function(req, res) {
       throw err;
     }
     console.log(user);
-    res.render('users', {
-      displayUsername: user.username,
-      displayBio: user.bio
-    })
+    if (!user.username){
+      res.render('404')
+    }
+    else{
+      res.render('users', {
+        displayUsername: user.username,
+        displayBio: user.bio
+      })
+    }
   });
 });
 
