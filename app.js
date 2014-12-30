@@ -7,7 +7,7 @@ db.once('open', function(callback) {
   // yay!
 });
 //start of my express, bodyparser, and js
-var express = require('express');
+var express = require('express.io');
 var bodyParser = require('body-parser');
 var ejs = require('ejs');
 var http = require('http');
@@ -31,10 +31,14 @@ app.set('view options', {
   layout: false
 });
 
+var connect = require('connect');
+app.use(express.cookieParser("randomSecret2i3hgehi"));
+app.use(express.session({
+  secret : "session123",
+  cookie : {maxAge : 72000000}
+}));
+
 //begin
-app.get('/', function(req, res) {
-  res.render('index')
-})
 
 var User = mongoose.model('User', {
   username: String,
@@ -43,8 +47,18 @@ var User = mongoose.model('User', {
   bio: String
 });
 
+app.get('/', function(req, res) {
+  if(req.session.sid) {
+    User.findOne({'_id' : req.session.sid}, function(err, userObj) {
+      console.log(userObj);
+    });
+  }
+  res.render('index')
+})
+
+
 app.get('/users', function(req, res) {
-  Users.find({}, function(err, users) {
+  User.find({}, function(err, users) {
     if (err) {
       throw err;
     }
@@ -92,6 +106,7 @@ app.post('/users', function(req, res) {
     if (err) {
       throw err;
     }
+    req.session.sid = savedUser._id;
     res.send({
       user: savedUser
     });
