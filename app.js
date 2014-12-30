@@ -128,6 +128,9 @@ app.get("/users/:username", function(req, res) {
       res.render('users', {
         displayUsername: user.username,
         displayBio: user.bio
+        // if(user.bio != undefined){
+        // displayBio: user.bio
+        // }
       })
     }
   });
